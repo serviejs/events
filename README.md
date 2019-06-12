@@ -4,7 +4,7 @@
 [![NPM downloads][downloads-image]][downloads-url]
 [![Build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
-[![Bundle size][bundlephobia-image]](bundlephobia-url)
+[![Bundle size][bundlephobia-image]][bundlephobia-url]
 
 > Tiny type-safe event emitter.
 
@@ -63,4 +63,4 @@ MIT
 [coveralls-image]: https://img.shields.io/coveralls/serviejs/events.svg?style=flat
 [coveralls-url]: https://coveralls.io/r/serviejs/events?branch=master
 [bundlephobia-image]: https://img.shields.io/bundlephobia/minzip/@servie/events.svg
-[bundlephobia-url]: https://bundlephobia.com/result?p=servie
+[bundlephobia-url]: https://bundlephobia.com/result?p=@servie/events
