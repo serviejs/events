@@ -1,4 +1,4 @@
-# Tiny Events
+# Events
 
 [![NPM version][npm-image]][npm-url]
 [![NPM downloads][downloads-image]][downloads-url]
@@ -11,13 +11,13 @@
 ## Installation
 
 ```
-npm install tinyevents --save
+npm install @servie/events --save
 ```
 
 ## Usage
 
 ```ts
-import { Emitter, once } from "tinyevents";
+import { Emitter, once } from "@servie/events";
 
 // Define an events interface using keys & argument tuples.
 interface Events {
@@ -54,13 +54,13 @@ This project is written using [TypeScript](https://github.com/Microsoft/TypeScri
 
 MIT
 
-[npm-image]: https://img.shields.io/npm/v/tinyevents.svg?style=flat
-[npm-url]: https://npmjs.org/package/tinyevents
-[downloads-image]: https://img.shields.io/npm/dm/tinyevents.svg?style=flat
-[downloads-url]: https://npmjs.org/package/tinyevents
-[travis-image]: https://img.shields.io/travis/serviejs/tinyevents.svg?style=flat
-[travis-url]: https://travis-ci.org/serviejs/tinyevents
-[coveralls-image]: https://img.shields.io/coveralls/serviejs/tinyevents.svg?style=flat
-[coveralls-url]: https://coveralls.io/r/serviejs/tinyevents?branch=master
-[bundlephobia-image]: https://img.shields.io/bundlephobia/minzip/tinyevents.svg
+[npm-image]: https://img.shields.io/npm/v/@servie/events.svg?style=flat
+[npm-url]: https://npmjs.org/package/@servie/events
+[downloads-image]: https://img.shields.io/npm/dm/@servie/events.svg?style=flat
+[downloads-url]: https://npmjs.org/package/@servie/events
+[travis-image]: https://img.shields.io/travis/serviejs/events.svg?style=flat
+[travis-url]: https://travis-ci.org/serviejs/events
+[coveralls-image]: https://img.shields.io/coveralls/serviejs/events.svg?style=flat
+[coveralls-url]: https://coveralls.io/r/serviejs/events?branch=master
+[bundlephobia-image]: https://img.shields.io/bundlephobia/minzip/@servie/events.svg
 [bundlephobia-url]: https://bundlephobia.com/result?p=servie
