@@ -1,7 +1,7 @@
 /**
  * Valid event listener args.
  */
-export type ValidArgs<T> = T extends any[] ? T : never;
+export type ValidArgs<T> = T extends unknown[] ? T : never;
 
 /**
  * Event listener type.
