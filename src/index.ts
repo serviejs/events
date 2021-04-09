@@ -50,8 +50,8 @@ export class Emitter<T> {
 
   emit<K extends keyof T>(type: K, ...args: ValidArgs<T[K]>) {
     const stack = this.$[type];
-    if (stack) stack.slice().forEach((fn) => fn(...args));
-    this._.slice().forEach((fn) => fn({ type, args }));
+    if (stack) for (const fn of stack.slice()) fn(...args);
+    for (const fn of this._.slice()) fn({ type, args });
   }
 }
 
