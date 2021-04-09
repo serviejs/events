@@ -2,8 +2,8 @@
 
 [![NPM version][npm-image]][npm-url]
 [![NPM downloads][downloads-image]][downloads-url]
-[![Build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
+[![Build status][build-image]][build-url]
+[![Build coverage][coverage-image]][coverage-url]
 [![Bundle size][bundlephobia-image]][bundlephobia-url]
 
 > Tiny type-safe event emitter.
@@ -54,13 +54,13 @@ This project is written using [TypeScript](https://github.com/Microsoft/TypeScri
 
 MIT
 
-[npm-image]: https://img.shields.io/npm/v/@servie/events.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@servie/events
 [npm-url]: https://npmjs.org/package/@servie/events
-[downloads-image]: https://img.shields.io/npm/dm/@servie/events.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/@servie/events
 [downloads-url]: https://npmjs.org/package/@servie/events
-[travis-image]: https://img.shields.io/travis/serviejs/events.svg?style=flat
-[travis-url]: https://travis-ci.org/serviejs/events
-[coveralls-image]: https://img.shields.io/coveralls/serviejs/events.svg?style=flat
-[coveralls-url]: https://coveralls.io/r/serviejs/events?branch=master
+[build-image]: https://img.shields.io/github/workflow/status/serviejs/events/CI/main
+[build-url]: https://github.com/serviejs/events/actions/workflows/ci.yml?query=branch%3Amain
+[coverage-image]: https://img.shields.io/codecov/c/gh/serviejs/events
+[coverage-url]: https://codecov.io/gh/serviejs/events
 [bundlephobia-image]: https://img.shields.io/bundlephobia/minzip/@servie/events.svg
 [bundlephobia-url]: https://bundlephobia.com/result?p=@servie/events
