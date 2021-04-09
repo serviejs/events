@@ -25,27 +25,25 @@ export type EachEventListener<T> = (arg: EachValidArgs<T>) => void;
 /**
  * Wrap `fn` for uniqueness, avoids removing different `fn` in stack.
  */
-export type _Wrapper<T> = { fn: T };
+export type $Wrap<T> = { fn: T };
 
 /**
  * Create an `off` function given an input.
  */
-function add<T>(stack: Array<T>, value: T): () => void {
-  stack.push(value);
-  return () => void stack.splice(stack.indexOf(value) >>> 0, 1);
+function add<T>(stack: Set<T>, value: T): () => boolean {
+  stack.add(value);
+  return () => stack.delete(value);
 }
 
 /**
  * Type-safe event emitter.
  */
 export class Emitter<T> {
-  _: Array<_Wrapper<EachEventListener<T>>> = [];
-  $: { [K in keyof T]: Array<_Wrapper<EventListener<T, K>>> } = Object.create(
-    null
-  );
+  _: Set<$Wrap<EachEventListener<T>>> = new Set();
+  $: { [K in keyof T]: Set<$Wrap<EventListener<T, K>>> } = Object.create(null);
 
   on<K extends keyof T>(type: K, fn: EventListener<T, K>) {
-    const stack = (this.$[type] = this.$[type]! || []);
+    const stack = (this.$[type] = this.$[type] || new Set());
     return add(stack, { fn });
   }
 
@@ -55,8 +53,8 @@ export class Emitter<T> {
 
   emit<K extends keyof T>(type: K, ...args: ValidArgs<T[K]>) {
     const stack = this.$[type];
-    if (stack) for (const { fn } of stack.slice()) fn(...args);
-    for (const { fn } of this._.slice()) fn({ type, args });
+    if (stack) for (const { fn } of stack) fn(...args);
+    for (const { fn } of this._) fn({ type, args });
   }
 }
 

@@ -29,8 +29,8 @@ describe("events", () => {
     events.emit("test", true);
     expect(spy).toHaveBeenCalledTimes(2);
 
-    off1();
-    off1();
+    expect(off1()).toEqual(true);
+    expect(off1()).toEqual(false);
 
     events.emit("test", true);
     expect(spy).toHaveBeenCalledTimes(3);
