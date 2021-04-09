@@ -23,6 +23,14 @@ export type EachValidArgs<T> = {
 export type EachEventListener<T> = (arg: EachValidArgs<T>) => void;
 
 /**
+ * Create an `off` function given an input.
+ */
+function off<T>(stack: Array<T>, value: T): () => boolean {
+  let removed = false;
+  return () => removed || (removed = !!stack.splice(stack.indexOf(value), 1));
+}
+
+/**
  * Type-safe event emitter.
  */
 export class Emitter<T> {
@@ -32,18 +40,18 @@ export class Emitter<T> {
   on<K extends keyof T>(type: K, callback: EventListener<T, K>) {
     const stack = (this.$[type] = this.$[type]! || []);
     stack.push(callback);
-    return () => stack.splice(stack.indexOf(callback) >>> 0, 1);
+    return off(stack, callback);
   }
 
   each(callback: EachEventListener<T>) {
     this._.push(callback);
-    return () => this._.splice(this._.indexOf(callback) >>> 0, 1);
+    return off(this._, callback);
   }
 
   emit<K extends keyof T>(type: K, ...args: ValidArgs<T[K]>) {
     const stack = this.$[type];
-    if (stack) stack.slice().forEach(fn => fn(...args));
-    this._.slice().forEach(fn => fn({ type, args }));
+    if (stack) stack.slice().map(fn => fn(...args));
+    this._.slice().map(fn => fn({ type, args }));
   }
 }
 

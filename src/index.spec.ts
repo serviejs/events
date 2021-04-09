@@ -21,6 +21,27 @@ describe("tiny events", () => {
       expect(spy).toHaveBeenLastCalledWith(true);
     });
 
+    it("should remove function only once", () => {
+      const events = new Emitter<Events>();
+      const spy = jest.fn();
+
+      const off1 = events.on("test", spy);
+      const off2 = events.on("test", spy);
+      events.emit("test", true);
+      expect(spy).toHaveBeenCalledTimes(2);
+
+      expect(off1()).toEqual(true);
+      expect(off1()).toEqual(true);
+
+      events.emit("test", true);
+      expect(spy).toHaveBeenCalledTimes(3);
+
+      expect(off2()).toEqual(true);
+
+      events.emit("test", false);
+      expect(spy).toHaveBeenCalledTimes(3);
+    });
+
     it("should emit `each` event", () => {
       const events = new Emitter<Events>();
       const spy = jest.fn();
