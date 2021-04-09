@@ -78,7 +78,7 @@ describe("tiny events", () => {
       const events2 = new Emitter<Pick<Events, "test">>();
       const spy = jest.fn();
 
-      events1.each(e => {
+      events1.each((e) => {
         if (e.type === "test") {
           events2.emit(e.type, ...e.args);
         }

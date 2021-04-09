@@ -1,27 +1,36 @@
 {
   "name": "@servie/events",
   "version": "1.0.0",
-  "description": "Tiny type-safe event emitter",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "sideEffects": false,
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "prettier": "prettier --write",
-    "lint": "tslint \"src/**/*.ts\" --project tsconfig.json",
-    "format": "npm run prettier -- README.md \"src/**/*.{js,ts}\"",
-    "build": "rimraf dist && tsc",
-    "specs": "jest --coverage",
-    "test": "npm run lint && npm run build && npm run specs && npm run size",
-    "size": "size-limit",
-    "prepare": "npm run build"
+  "publishConfig": {
+    "access": "public"
   },
+  "description": "Tiny type-safe event emitter",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/serviejs/tinyevents.git"
   },
+  "author": {
+    "name": "Blake Embrey",
+    "email": "hello@blakeembrey.com",
+    "url": "http://blakeembrey.me"
+  },
+  "homepage": "https://github.com/serviejs/tinyevents",
+  "bugs": {
+    "url": "https://github.com/serviejs/tinyevents/issues"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "format": "ts-scripts format",
+    "lint": "ts-scripts lint",
+    "prepare": "ts-scripts install && ts-scripts build",
+    "size": "size-limit",
+    "specs": "ts-scripts specs",
+    "test": "ts-scripts test && npm run size"
+  },
+  "files": [
+    "dist/"
+  ],
   "keywords": [
     "events",
     "emitter",
@@ -29,66 +38,20 @@
     "typescript",
     "micro"
   ],
-  "author": {
-    "name": "Blake Embrey",
-    "email": "hello@blakeembrey.com",
-    "url": "http://blakeembrey.me"
+  "devDependencies": {
+    "@borderless/ts-scripts": "^0.3.0",
+    "@size-limit/preset-small-lib": "^4.10.2",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "size-limit": "^4.10.2",
+    "typescript": "^4.2.4"
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/serviejs/tinyevents/issues"
-  },
-  "homepage": "https://github.com/serviejs/tinyevents",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "200 B"
+      "limit": "210 B"
     }
-  ],
-  "jest": {
-    "roots": [
-      "<rootDir>/src/"
-    ],
-    "transform": {
-      "\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md}": [
-      "npm run prettier",
-      "git add"
-    ]
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.3.1",
-    "@types/jest": "^25.1.4",
-    "@types/node": "^13.9.0",
-    "husky": "^4.2.3",
-    "jest": "^25.1.0",
-    "lint-staged": "^10.0.8",
-    "prettier": "^1.18.2",
-    "size-limit": "^4.3.1",
-    "ts-jest": "^25.2.1",
-    "tslint": "^6.1.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-config-standard": "^9.0.0",
-    "typescript": "^3.5.1"
-  }
+  ]
 }
