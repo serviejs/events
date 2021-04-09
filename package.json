@@ -8,16 +8,16 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/serviejs/tinyevents.git"
+    "url": "git://github.com/serviejs/events.git"
   },
   "author": {
     "name": "Blake Embrey",
     "email": "hello@blakeembrey.com",
     "url": "http://blakeembrey.me"
   },
-  "homepage": "https://github.com/serviejs/tinyevents",
+  "homepage": "https://github.com/serviejs/events",
   "bugs": {
-    "url": "https://github.com/serviejs/tinyevents/issues"
+    "url": "https://github.com/serviejs/events/issues"
   },
   "main": "dist/index.js",
   "scripts": {
