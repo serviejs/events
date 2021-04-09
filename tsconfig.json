@@ -1,14 +1,10 @@
 {
+  "extends": "@borderless/ts-scripts/configs/tsconfig.json",
   "compilerOptions": {
-    "target": "es2017",
-    "lib": ["es2017", "dom"],
     "rootDir": "src",
     "outDir": "dist",
-    "module": "commonjs",
-    "strict": true,
-    "declaration": true,
-    "sourceMap": true,
-    "inlineSources": true
+    "module": "CommonJS",
+    "types": ["jest"]
   },
   "include": ["./src/**/*"]
 }
