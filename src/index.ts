@@ -23,35 +23,40 @@ export type EachValidArgs<T> = {
 export type EachEventListener<T> = (arg: EachValidArgs<T>) => void;
 
 /**
+ * Wrap `fn` for uniqueness, avoids removing different `fn` in stack.
+ */
+export type _Wrapper<T> = { fn: T };
+
+/**
  * Create an `off` function given an input.
  */
-function off<T>(stack: Array<T>, value: T): () => boolean {
-  let removed = false;
-  return () => removed || (removed = !!stack.splice(stack.indexOf(value), 1));
+function add<T>(stack: Array<T>, value: T): () => void {
+  stack.push(value);
+  return () => void stack.splice(stack.indexOf(value) >>> 0, 1);
 }
 
 /**
  * Type-safe event emitter.
  */
 export class Emitter<T> {
-  _: Array<EachEventListener<T>> = [];
-  $: { [K in keyof T]?: Array<EventListener<T, K>> } = Object.create(null);
+  _: Array<_Wrapper<EachEventListener<T>>> = [];
+  $: { [K in keyof T]: Array<_Wrapper<EventListener<T, K>>> } = Object.create(
+    null
+  );
 
-  on<K extends keyof T>(type: K, callback: EventListener<T, K>) {
+  on<K extends keyof T>(type: K, fn: EventListener<T, K>) {
     const stack = (this.$[type] = this.$[type]! || []);
-    stack.push(callback);
-    return off(stack, callback);
+    return add(stack, { fn });
   }
 
-  each(callback: EachEventListener<T>) {
-    this._.push(callback);
-    return off(this._, callback);
+  each(fn: EachEventListener<T>) {
+    return add(this._, { fn });
   }
 
   emit<K extends keyof T>(type: K, ...args: ValidArgs<T[K]>) {
     const stack = this.$[type];
-    if (stack) for (const fn of stack.slice()) fn(...args);
-    for (const fn of this._.slice()) fn({ type, args });
+    if (stack) for (const { fn } of stack.slice()) fn(...args);
+    for (const { fn } of this._.slice()) fn({ type, args });
   }
 }
 
@@ -63,10 +68,10 @@ export function once<T, K extends keyof T>(
   type: K,
   callback: EventListener<T, K>
 ) {
-  const remove = events.on(type, (...args: ValidArgs<T[K]>) => {
-    remove();
+  const off = events.on(type, (...args: ValidArgs<T[K]>) => {
+    off();
     return callback(...args);
   });
 
-  return remove;
+  return off;
 }

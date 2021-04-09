@@ -30,13 +30,13 @@ describe("tiny events", () => {
       events.emit("test", true);
       expect(spy).toHaveBeenCalledTimes(2);
 
-      expect(off1()).toEqual(true);
-      expect(off1()).toEqual(true);
+      off1();
+      off1();
 
       events.emit("test", true);
       expect(spy).toHaveBeenCalledTimes(3);
 
-      expect(off2()).toEqual(true);
+      off2();
 
       events.emit("test", false);
       expect(spy).toHaveBeenCalledTimes(3);
