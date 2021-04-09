@@ -14,7 +14,7 @@ export type EventListener<T, K extends keyof T> = (
  * Valid `each` listener args.
  */
 export type EachValidArgs<T> = {
-  [K in keyof T]: { type: K, args: ValidArgs<T[K]> }
+  [K in keyof T]: { type: K; args: ValidArgs<T[K]> };
 }[keyof T];
 
 /**
@@ -30,20 +30,14 @@ export class Emitter<T> {
   $: { [K in keyof T]?: Array<EventListener<T, K>> } = Object.create(null);
 
   on<K extends keyof T>(type: K, callback: EventListener<T, K>) {
-    (this.$[type] = this.$[type]! || []).push(callback);
-  }
-
-  off<K extends keyof T>(type: K, callback: EventListener<T, K>) {
-    const stack = this.$[type];
-    if (stack) stack.splice(stack.indexOf(callback) >>> 0, 1);
+    const stack = (this.$[type] = this.$[type]! || []);
+    stack.push(callback);
+    return () => stack.splice(stack.indexOf(callback) >>> 0, 1);
   }
 
   each(callback: EachEventListener<T>) {
     this._.push(callback);
-  }
-
-  none(callback: EachEventListener<T>) {
-    this._.splice(this._.indexOf(callback) >>> 0, 1);
+    return () => this._.splice(this._.indexOf(callback) >>> 0, 1);
   }
 
   emit<K extends keyof T>(type: K, ...args: ValidArgs<T[K]>) {
@@ -61,10 +55,10 @@ export function once<T, K extends keyof T>(
   type: K,
   callback: EventListener<T, K>
 ) {
-  function self(...args: ValidArgs<T[K]>) {
-    events.off(type, self);
+  const remove = events.on(type, (...args: ValidArgs<T[K]>) => {
+    remove();
     return callback(...args);
-  }
-  events.on(type, self);
-  return self;
+  });
+
+  return remove;
 }

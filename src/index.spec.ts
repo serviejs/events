@@ -11,29 +11,14 @@ describe("tiny events", () => {
       const events = new Emitter<Events>();
       const spy = jest.fn();
 
-      events.on("test", spy);
+      const off = events.on("test", spy);
       events.emit("test", true);
 
-      events.off("test", spy);
+      off();
       events.emit("test", false);
 
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy).toHaveBeenLastCalledWith(true);
-    });
-
-    it("should noop when removing unknown listing", () => {
-      const events = new Emitter<Events>();
-      const fn1 = jest.fn();
-      const fn2 = jest.fn();
-
-      expect(events.$.test).toBeUndefined();
-
-      events.off("test", fn1);
-      expect(events.$.test).toBeUndefined();
-
-      events.on("test", fn2);
-      events.off("test", fn1);
-      expect(events.$.test).toEqual([fn2]);
     });
 
     it("should emit `each` event", () => {
@@ -43,11 +28,11 @@ describe("tiny events", () => {
       events.emit("test", false);
       expect(spy).not.toHaveBeenCalled();
 
-      events.each(spy);
+      const off = events.each(spy);
       events.emit("test", true);
       expect(spy).toHaveBeenCalledTimes(1);
 
-      events.none(spy);
+      off();
       events.emit("test", false);
       expect(spy).toHaveBeenCalledTimes(1);
     });
