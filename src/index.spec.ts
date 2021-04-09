@@ -1,4 +1,4 @@
-import { Emitter, EachEventListener, once } from "./index";
+import { Emitter, once } from "./index";
 
 describe("tiny events", () => {
   interface Events {

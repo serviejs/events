@@ -30,20 +30,21 @@ const events = new Emitter<Events>();
 
 // Add or remove listeners.
 const listener = (...args) => console.log(args);
-events.on("test", listener);
-events.off("test", listener);
+const off = events.on("test", listener);
 
 // Emit an event.
 events.emit("test", true);
 
-// Listen to _all_ events, e.g. debugging.
+// Listen to _all_ events, i.e. for debugging.
 const eachListener = ({ type, args }) => console.log(type, args);
-events.each(eachListener);
-events.none(eachListener);
+const off = events.each(eachListener);
 
 // "Once" utility.
-const onceListener = (...args) => console.log(args);
-once(events, "test", onceListener);
+const runOnce = (...args) => console.log(args);
+once(events, "test", runOnce);
+
+// Remove the listener.
+off();
 ```
 
 ## TypeScript
