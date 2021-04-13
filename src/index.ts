@@ -56,7 +56,9 @@ export type $Wrap<T> = { fn: T };
  */
 function add<T>(stack: Set<T>, value: T): () => boolean {
   stack.add(value);
-  return () => stack.delete(value);
+  return function off() {
+    return stack.delete(value);
+  };
 }
 
 /**
@@ -96,7 +98,7 @@ export function once<T, K extends keyof Events<T>>(
   type: K,
   callback: EventListener<T, K>
 ) {
-  const off = events.on(type, (...args) => {
+  const off = events.on(type, function once(...args) {
     off();
     return callback(...args);
   });
