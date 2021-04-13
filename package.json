@@ -39,7 +39,7 @@
     "micro"
   ],
   "devDependencies": {
-    "@borderless/ts-scripts": "^0.3.0",
+    "@borderless/ts-scripts": "^0.4.1",
     "@size-limit/preset-small-lib": "^4.10.2",
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.37",
@@ -53,5 +53,8 @@
       "path": "dist/index.js",
       "limit": "200 B"
     }
-  ]
+  ],
+  "ts-scripts": {
+    "project": "tsconfig.build.json"
+  }
 }
