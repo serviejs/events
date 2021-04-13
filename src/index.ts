@@ -1,26 +1,50 @@
 /**
- * Valid event listener args.
+ * All events are emitted using this key.
+ */
+export const ALL_EVENTS = Symbol("ALL_EVENTS");
+
+/**
+ * Valid `ALL_EVENTS` listener args.
+ */
+export type AllEventsArg<T> = {
+  [K in keyof T]: { type: K; args: T[K] };
+}[keyof T];
+
+/**
+ * Internally defined emitter events.
+ */
+export interface EmitterEvents<T> {
+  [ALL_EVENTS]: [AllEventsArg<T>];
+}
+
+/**
+ * All possible events, user provided and built-in.
+ */
+export type Events<T> = T & EmitterEvents<T>;
+
+/**
+ * List of valid event args given `K`.
+ */
+export type ValidEventArgs<
+  T,
+  K extends keyof Events<T>
+> = K extends keyof EmitterEvents<T>
+  ? EmitterEvents<T>[K]
+  : K extends keyof T
+  ? ValidArgs<T[K]>
+  : never;
+
+/**
+ * Valid event listener args from `T`.
  */
 export type ValidArgs<T> = T extends unknown[] ? T : never;
 
 /**
  * Event listener type.
  */
-export type EventListener<T, K extends keyof T> = (
-  ...args: ValidArgs<T[K]>
+export type EventListener<T, K extends keyof Events<T>> = (
+  ...args: ValidEventArgs<T, K>
 ) => void;
-
-/**
- * Valid `each` listener args.
- */
-export type EachValidArgs<T> = {
-  [K in keyof T]: { type: K; args: ValidArgs<T[K]> };
-}[keyof T];
-
-/**
- * Wildcard event listener type.
- */
-export type EachEventListener<T> = (arg: EachValidArgs<T>) => void;
 
 /**
  * Wrap `fn` for uniqueness, avoids removing different `fn` in stack.
@@ -36,37 +60,43 @@ function add<T>(stack: Set<T>, value: T): () => boolean {
 }
 
 /**
+ * Emit an event.
+ */
+function emit<T, K extends keyof Events<T>>(
+  stack: Set<$Wrap<EventListener<T, K>>>,
+  ...args: ValidEventArgs<T, K>
+): void {
+  if (stack) for (const { fn } of stack) fn(...args);
+}
+
+/**
  * Type-safe event emitter.
  */
 export class Emitter<T> {
-  _: Set<$Wrap<EachEventListener<T>>> = new Set();
-  $: { [K in keyof T]: Set<$Wrap<EventListener<T, K>>> } = Object.create(null);
+  $: {
+    [K in keyof Events<T>]: Set<$Wrap<EventListener<T, K>>>;
+  } = Object.create(null);
 
-  on<K extends keyof T>(type: K, fn: EventListener<T, K>) {
+  on<K extends keyof Events<T>>(type: K, fn: EventListener<T, K>) {
     const stack = (this.$[type] = this.$[type] || new Set());
     return add(stack, { fn });
   }
 
-  each(fn: EachEventListener<T>) {
-    return add(this._, { fn });
-  }
-
-  emit<K extends keyof T>(type: K, ...args: ValidArgs<T[K]>) {
-    const stack = this.$[type];
-    if (stack) for (const { fn } of stack) fn(...args);
-    for (const { fn } of this._) fn({ type, args });
+  emit<K extends keyof T>(type: K, ...args: ValidEventArgs<T, K>) {
+    emit(this.$[type], ...args);
+    emit(this.$[ALL_EVENTS], { type, args });
   }
 }
 
 /**
  * Helper to listen to an event once only.
  */
-export function once<T, K extends keyof T>(
+export function once<T, K extends keyof Events<T>>(
   events: Emitter<T>,
   type: K,
   callback: EventListener<T, K>
 ) {
-  const off = events.on(type, (...args: ValidArgs<T[K]>) => {
+  const off = events.on(type, (...args) => {
     off();
     return callback(...args);
   });

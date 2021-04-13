@@ -17,7 +17,7 @@ npm install @servie/events --save
 ## Usage
 
 ```ts
-import { Emitter, once } from "@servie/events";
+import { Emitter, once, ALL_EVENTS } from "@servie/events";
 
 // Define an events interface using keys & argument tuples.
 interface Events {
@@ -37,7 +37,7 @@ events.emit("test", true);
 
 // Listen to _all_ events, i.e. for debugging.
 const eachListener = ({ type, args }) => console.log(type, args);
-const off = events.each(eachListener);
+const off = events.on(ALL_EVENTS, eachListener);
 
 // "Once" utility.
 const runOnce = (...args) => console.log(args);

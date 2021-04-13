@@ -1,4 +1,4 @@
-import { Emitter, once } from "./index";
+import { ALL_EVENTS, Emitter, once } from "./index";
 
 interface Events {
   test: [boolean];
@@ -41,14 +41,14 @@ describe("events", () => {
     expect(spy).toHaveBeenCalledTimes(3);
   });
 
-  it("should emit `each` event", () => {
+  it("should emit `ALL_EVENTS` event", () => {
     const events = new Emitter<Events>();
     const spy = jest.fn();
 
     events.emit("test", false);
     expect(spy).not.toHaveBeenCalled();
 
-    const off = events.each(spy);
+    const off = events.on(ALL_EVENTS, spy);
     events.emit("test", true);
     expect(spy).toHaveBeenCalledTimes(1);
 
@@ -57,12 +57,12 @@ describe("events", () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it("should forward `each` events easily", () => {
+  it("should forward `ALL_EVENTS` events easily", () => {
     const events1 = new Emitter<Events>();
     const events2 = new Emitter<Pick<Events, "test">>();
     const spy = jest.fn();
 
-    events2.each(({ type, args }) => {
+    events2.on(ALL_EVENTS, ({ type, args }) => {
       events1.emit(type, ...args);
     });
 
@@ -72,12 +72,12 @@ describe("events", () => {
     expect(spy).toHaveBeenLastCalledWith(true);
   });
 
-  it("should filter `each` events easily", () => {
+  it("should filter `ALL_EVENTS` events easily", () => {
     const events1 = new Emitter<Events>();
     const events2 = new Emitter<Pick<Events, "test">>();
     const spy = jest.fn();
 
-    events1.each((e) => {
+    events1.on(ALL_EVENTS, (e) => {
       if (e.type === "test") {
         events2.emit(e.type, ...e.args);
       }
